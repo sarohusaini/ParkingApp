@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ParkingApp</string>
+    <string name="map_content_description">Map showing parking areas</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+</resources>

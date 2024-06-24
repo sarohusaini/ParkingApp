@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1095846267037",
+    "firebase_url": "https://carpraking-4dbf0-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "carpraking-4dbf0",
+    "storage_bucket": "carpraking-4dbf0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095846267037:android:76d6c0efd7ea07a96bac74",
+        "android_client_info": {
+          "package_name": "com.example.parkingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADMn-ERGQVPPCcNFDaqP6rqicpRaHa8HM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
