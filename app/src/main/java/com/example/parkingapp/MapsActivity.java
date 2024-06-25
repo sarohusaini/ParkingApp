@@ -11,6 +11,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -32,38 +37,51 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
-
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add markers for parking areas with available spots
-        LatLng parkingArea1 = new LatLng(48.7571273, -3.4519406);
-        mMap.addMarker(new MarkerOptions()
-                .position(parkingArea1)
-                .title("Parking Area 1")
-                .snippet("Available spots: 10")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        // Initialize Firebase Database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("parkingSpots");
 
-        LatLng parkingArea2 = new LatLng(48.7583462, -3.4491411);
-        mMap.addMarker(new MarkerOptions()
-                .position(parkingArea2)
-                .title("Parking Area 2")
-                .snippet("Available spots: 5")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Clear existing markers
+                mMap.clear();
 
-        LatLng parkingArea3 = new LatLng(48.762093, -3.449384);
-        mMap.addMarker(new MarkerOptions()
-                .position(parkingArea3)
-                .title("Parking Area 3")
-                .snippet("Available spots: 3")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    double latitude = snapshot.child("latitude").getValue(Double.class);
+                    double longitude = snapshot.child("longitude").getValue(Double.class);
+                    String title = snapshot.child("title").getValue(String.class);
+                    int availableSpots = snapshot.child("availableSpots").getValue(Integer.class);
 
-        // Move the camera to a default location
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(parkingArea1));
+                    LatLng parkingArea = new LatLng(latitude, longitude);
+                    mMap.addMarker(new MarkerOptions()
+                            .position(parkingArea)
+                            .title(title)
+                            .snippet("Available spots: " + availableSpots)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                }
+
+                // Move the camera to the first parking area
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    DataSnapshot firstSnapshot = dataSnapshot.getChildren().iterator().next();
+                    double firstLat = firstSnapshot.child("latitude").getValue(Double.class);
+                    double firstLng = firstSnapshot.child("longitude").getValue(Double.class);
+                    LatLng firstParkingArea = new LatLng(firstLat, firstLng);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(firstParkingArea));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
     }
 
     @Override
