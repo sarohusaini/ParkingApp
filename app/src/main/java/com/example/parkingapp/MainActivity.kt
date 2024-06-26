@@ -1,8 +1,6 @@
 package com.example.parkingapp
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.RelativeLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,23 +17,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        // Add the ImageView programmatically
-        val imageView = ImageView(this)
-        imageView.setImageResource(R.drawable.parkingsign)
-        val params = RelativeLayout.LayoutParams(
-            200,  // Set the desired width
-            100) // Set the desired height
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-        imageView.layoutParams = params
-
-        // Find the layout and add the ImageView
-        val layout = RelativeLayout(this)
-        layout.addView(imageView)
-
-        setContentView(layout)
-
-        // Set the content for Compose
         setContent {
             ParkingAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -48,6 +29,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
