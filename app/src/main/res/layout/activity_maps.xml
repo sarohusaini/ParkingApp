@@ -10,4 +10,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/map_content_description" />
+
+    <!-- Avatar ImageView -->
+    <ImageView
+        android:id="@+id/avatarImageView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/avatar"
+        android:scaleType="centerCrop"
+        android:contentDescription="User Avatar"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:backgroundTint="@android:color/white" />
+
+    <!-- User Info and Logout Layout -->
+    <LinearLayout
+        android:id="@+id/userInfoLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/avatarImageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_corner_background"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/userNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saro Husaini"
+            android:textSize="16sp"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
 </RelativeLayout>
