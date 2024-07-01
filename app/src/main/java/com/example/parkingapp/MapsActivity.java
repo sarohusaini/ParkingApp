@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -124,6 +125,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.clear();
                 parkingSpots.clear();
 
+                LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     double latitude = snapshot.child("latitude").getValue(Double.class);
                     double longitude = snapshot.child("longitude").getValue(Double.class);
@@ -145,15 +148,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } else {
                         marker.setTag("availableSpots");
                     }
+
+                    // Add this marker to the bounds
+                    boundsBuilder.include(parkingArea);
                 }
 
-                // Move the camera to the first parking area
+                // Move the camera to show the bounds containing the three specific marks
                 if (dataSnapshot.getChildrenCount() > 0) {
-                    DataSnapshot firstSnapshot = dataSnapshot.getChildren().iterator().next();
-                    double firstLat = firstSnapshot.child("latitude").getValue(Double.class);
-                    double firstLng = firstSnapshot.child("longitude").getValue(Double.class);
-                    LatLng firstParkingArea = new LatLng(firstLat, firstLng);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(firstParkingArea));
+                    LatLngBounds bounds = boundsBuilder.build();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
                 }
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
